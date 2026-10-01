@@ -2,6 +2,37 @@ document.querySelectorAll("[data-current-year]").forEach((year) => {
   year.textContent = new Date().getFullYear();
 });
 
+const scholarCard = document.querySelector("[data-scholar-card]");
+
+if (scholarCard) {
+  fetch("data/scholar-metrics.json", { cache: "no-cache" })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Scholar metrics could not be loaded");
+      }
+      return response.json();
+    })
+    .then((metrics) => {
+      const citations = scholarCard.querySelector("[data-scholar-citations]");
+      const hIndex = scholarCard.querySelector("[data-scholar-h-index]");
+      const updated = scholarCard.querySelector("[data-scholar-updated]");
+      const updateDate = new Date(metrics.updated_at);
+
+      citations.textContent = metrics.citations.toLocaleString("en-US");
+      hIndex.textContent = metrics.h_index.toLocaleString("en-US");
+      updated.dateTime = metrics.updated_at;
+      updated.textContent = new Intl.DateTimeFormat("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        timeZone: "UTC",
+      }).format(updateDate);
+    })
+    .catch(() => {
+      scholarCard.dataset.status = "cached";
+    });
+}
+
 const canvas = document.querySelector(".motion-field");
 
 if (canvas) {

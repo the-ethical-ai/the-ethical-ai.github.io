@@ -18,6 +18,14 @@ The opening animation uses the browser's built-in canvas API, so it works on
 GitHub Pages without a server or additional dependencies. It automatically
 becomes a still background when a visitor enables reduced motion.
 
+## Scholar Metrics
+
+The research page displays citation and h-index data from Tyler's public Google
+Scholar profile. `.github/workflows/update-scholar-metrics.yml` refreshes
+`data/scholar-metrics.json` every Monday and can also be run manually from the
+repository's Actions tab. If Google Scholar rejects a refresh, the website keeps
+showing the most recent successful data rather than replacing it.
+
 ## Publish With GitHub Pages
 
 1. Create a GitHub repository named `the-ethical-ai.github.io`.
