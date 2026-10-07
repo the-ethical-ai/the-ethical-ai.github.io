@@ -33,6 +33,129 @@ if (scholarCard) {
     });
 }
 
+const riskEstimator = document.querySelector("[data-risk-estimator]");
+
+if (riskEstimator) {
+  const form = riskEstimator.querySelector("[data-risk-controls]");
+  const riskValue = riskEstimator.querySelector("[data-risk-value]");
+  const riskVerdict = riskEstimator.querySelector("[data-risk-verdict]");
+  const riskFill = riskEstimator.querySelector("[data-risk-fill]");
+  const riskMarker = riskEstimator.querySelector("[data-risk-marker]");
+
+  const verdicts = [
+    {
+      maximum: 0.1,
+      responses: [
+        "Baseline tranquility detected. Please avoid improving the model.",
+        "The risk is mostly theoretical, which has never stopped a good panel discussion.",
+        "No immediate concern. The ontology may remain open.",
+        "Statistically adjacent to fine. Emotionally, also fine.",
+        "Negligible-ish. Continue to behave normally.",
+      ],
+    },
+    {
+      maximum: 1,
+      responses: [
+        "Low, but non-zero in a technically meaningful sense.",
+        "The dashboard recommends one raised eyebrow.",
+        "Probably fine. Documentation would be a charming precaution.",
+        "Below alarm threshold; above complete innocence.",
+        "No intervention required beyond ordinary academic supervision.",
+      ],
+    },
+    {
+      maximum: 5,
+      responses: [
+        "Material enough to justify a meeting.",
+        "Caution has entered the literature review.",
+        "A risk memo would now look less theatrical.",
+        "Someone should ask what the model is doing, casually.",
+        "The estimate has become meeting-shaped.",
+      ],
+    },
+    {
+      maximum: 20,
+      responses: [
+        "Concerningly publishable.",
+        "This is no longer a thought experiment with good lighting.",
+        "Ethics review has begun typing.",
+        "The sandbox would like a word.",
+        "Please attach limitations before proceeding.",
+      ],
+    },
+    {
+      maximum: 50,
+      responses: [
+        "Please close the terminal and find an adult.",
+        "The precautionary principle is standing directly behind you.",
+        "Deployment now requires a second adult and an unusually calm systems administrator.",
+        "Risk governance has escalated from document to physical presence.",
+        "This result should not be left unattended.",
+      ],
+    },
+    {
+      maximum: Infinity,
+      responses: [
+        "Apocalypse incoming, subject to peer review.",
+        "The error bars have requested legal counsel.",
+        "The model has left its confidence interval.",
+        "Turn it off, then explain why it had infrastructure access.",
+        "Congratulations. You have operationalized the worst-case scenario.",
+      ],
+    },
+  ];
+
+  const verdictFor = (probability, seed) => {
+    const band = verdicts.find(({ maximum }) => probability < maximum);
+    return band.responses[seed % band.responses.length];
+  };
+
+  const updateRisk = () => {
+    const values = new FormData(form);
+    const capability = Number(values.get("capability"));
+    const autonomy = Number(values.get("autonomy"));
+    const access = Number(values.get("access"));
+    const sleep = Number(values.get("sleep"));
+    const philosophy = Number(values.get("philosophy"));
+    const friday = values.has("friday") ? 1 : 0;
+    const oversight = values.has("oversight") ? 1 : 0;
+    const score =
+      -8.4 +
+      0.032 * capability ** 2 +
+      0.041 * autonomy ** 2 +
+      0.052 * access ** 2 +
+      0.08 * sleep +
+      0.07 * philosophy +
+      1.25 * friday -
+      1.1 * oversight;
+    const probability = 100 / (1 + Math.exp(-score));
+    const displayValue = probability < 10 ? probability.toFixed(2) : probability.toFixed(1);
+    const scalePosition = Math.min(100, Math.max(0.6, probability));
+    const responseSeed =
+      capability * 3 +
+      autonomy * 5 +
+      access * 7 +
+      sleep * 11 +
+      philosophy * 13 +
+      friday * 17 +
+      oversight * 19;
+
+    riskValue.textContent = displayValue;
+    riskVerdict.textContent = verdictFor(probability, responseSeed);
+    riskFill.style.width = `${100 - scalePosition}%`;
+    riskMarker.style.left = `${scalePosition}%`;
+
+    form.querySelectorAll('input[type="range"]').forEach((input) => {
+      const output = form.querySelector(`[data-output="${input.name}"]`);
+      output.textContent = input.value;
+    });
+  };
+
+  form.addEventListener("input", updateRisk);
+  form.addEventListener("reset", () => window.setTimeout(updateRisk, 0));
+  updateRisk();
+}
+
 const canvas = document.querySelector(".motion-field");
 
 if (canvas) {

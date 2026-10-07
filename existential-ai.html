@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050609" />
+    <title>Tyler Chang | Existential AI</title>
+    <meta
+      name="description"
+      content="A satirical estimator for Tyler Chang's likelihood of causing an existential problem through artificial intelligence."
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23050609'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%234da8ff' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%23bfe3ff'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="site-name" href="index.html" aria-label="Tyler Chang, home">
+        <span class="site-mark" aria-hidden="true"></span>
+        Tyler Chang
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="research.html">Research</a>
+        <a href="existential-ai.html" aria-current="page">Existential AI</a>
+        <a href="cv.html">CV</a>
+      </nav>
+    </header>
+
+    <main class="content-page existential-page">
+      <section class="existential-intro" aria-labelledby="existential-title">
+        <div class="existential-heading">
+          <p class="eyebrow">Personal risk observatory / beta</p>
+          <h1 id="existential-title">Existential AI</h1>
+          <p class="lead">
+            A methodologically adventurous estimate of the likelihood that I
+            personally cause an existential problem through artificial
+            intelligence.
+          </p>
+        </div>
+
+        <section class="risk-instrument" data-risk-estimator aria-labelledby="estimator-title">
+          <header class="instrument-header">
+            <div>
+              <p class="instrument-code">CEILE v0.3.1</p>
+              <h2 id="estimator-title">Incident likelihood estimator</h2>
+            </div>
+            <span class="instrument-status"><span aria-hidden="true"></span>Model operational</span>
+          </header>
+
+          <div class="risk-dashboard">
+            <section class="risk-output" aria-live="polite" aria-atomic="true">
+              <p class="risk-output__label">Estimated annual likelihood</p>
+              <p class="risk-number"><span data-risk-value>0.03</span><span>%</span></p>
+              <p class="risk-verdict" data-risk-verdict>Negligible-ish. Continue to behave normally.</p>
+
+              <div class="risk-scale" aria-hidden="true">
+                <div class="risk-scale__track">
+                  <span class="risk-scale__fill" data-risk-fill style="width: 99.4%"></span>
+                  <span class="risk-scale__marker" data-risk-marker style="left: 0.6%"></span>
+                </div>
+                <div class="risk-scale__labels">
+                  <span>Fine (trust me)</span>
+                  <span>Caution</span>
+                  <span>Apocalypse incoming</span>
+                </div>
+              </div>
+
+              <dl class="risk-metadata">
+                <div>
+                  <dt>Confidence</dt>
+                  <dd>Undeserved</dd>
+                </div>
+                <div>
+                  <dt>Peer review</dt>
+                  <dd>Pending indefinitely</dd>
+                </div>
+              </dl>
+            </section>
+
+            <form class="risk-controls" data-risk-controls>
+              <div class="risk-control">
+                <div class="risk-control__heading">
+                  <label for="capability">Model capability</label>
+                  <output for="capability" data-output="capability">4</output>
+                </div>
+                <input id="capability" name="capability" type="range" min="0" max="10" value="4" />
+                <div class="range-labels"><span>Autocomplete</span><span>Questionable agency</span></div>
+              </div>
+
+              <div class="risk-control">
+                <div class="risk-control__heading">
+                  <label for="autonomy">Operational autonomy</label>
+                  <output for="autonomy" data-output="autonomy">2</output>
+                </div>
+                <input id="autonomy" name="autonomy" type="range" min="0" max="10" value="2" />
+                <div class="range-labels"><span>Asks permission</span><span>Has objectives</span></div>
+              </div>
+
+              <div class="risk-control">
+                <div class="risk-control__heading">
+                  <label for="access">Infrastructure access</label>
+                  <output for="access" data-output="access">1</output>
+                </div>
+                <input id="access" name="access" type="range" min="0" max="10" value="1" />
+                <div class="range-labels"><span>Local sandbox</span><span>Global root</span></div>
+              </div>
+
+              <div class="risk-control">
+                <div class="risk-control__heading">
+                  <label for="sleep">Researcher sleep deficit</label>
+                  <output for="sleep" data-output="sleep">3</output>
+                </div>
+                <input id="sleep" name="sleep" type="range" min="0" max="10" value="3" />
+                <div class="range-labels"><span>Eight hours</span><span>Conference deadline</span></div>
+              </div>
+
+              <div class="risk-control">
+                <div class="risk-control__heading">
+                  <label for="philosophy">Unchecked philosophy</label>
+                  <output for="philosophy" data-output="philosophy">6</output>
+                </div>
+                <input id="philosophy" name="philosophy" type="range" min="0" max="10" value="6" />
+                <div class="range-labels"><span>One footnote</span><span>Ontology deployed</span></div>
+              </div>
+
+              <fieldset class="risk-toggles">
+                <legend>Procedural safeguards</legend>
+                <label class="toggle-control">
+                  <input type="checkbox" name="oversight" checked />
+                  <span class="toggle-control__switch" aria-hidden="true"></span>
+                  <span>Adult supervision present</span>
+                </label>
+                <label class="toggle-control">
+                  <input type="checkbox" name="friday" />
+                  <span class="toggle-control__switch" aria-hidden="true"></span>
+                  <span>Deploying late on Friday</span>
+                </label>
+              </fieldset>
+
+              <button class="reset-button" type="reset">Restore implausible defaults</button>
+            </form>
+          </div>
+        </section>
+      </section>
+
+      <section class="method-section" aria-labelledby="formula-title">
+        <div class="method-copy">
+          <p class="eyebrow">The model</p>
+          <h2 id="formula-title">A semi-serious formula</h2>
+          <p>
+            The estimator uses a logistic function, which is a respectable way
+            to prevent a made-up score from wandering below 0% or above 100%.
+            Its inputs loosely resemble factors used in real technology risk
+            discussions.
+          </p>
+        </div>
+        <div class="formula-panel">
+          <p class="formula">
+            P(incident) = 100 &times; &sigma;(&minus;8.4 + 0.032C<sup>2</sup> +
+            0.041A<sup>2</sup> + 0.052I<sup>2</sup> + 0.08S + 0.07&Phi; +
+            1.25F &minus; 1.10O)
+          </p>
+          <dl class="formula-key">
+            <div><dt>C</dt><dd>Capability</dd></div>
+            <div><dt>A</dt><dd>Autonomy</dd></div>
+            <div><dt>I</dt><dd>Infrastructure access</dd></div>
+            <div><dt>S</dt><dd>Sleep deficit</dd></div>
+            <div><dt>&Phi;</dt><dd>Philosophical overreach</dd></div>
+            <div><dt>F</dt><dd>Friday deployment</dd></div>
+            <div><dt>O</dt><dd>Oversight</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="disclaimer-section" aria-labelledby="disclaimer-title">
+        <header class="section-heading">
+          <span>01</span>
+          <h2 id="disclaimer-title">Disclaimers and epistemic hygiene</h2>
+        </header>
+        <div class="disclaimer-grid">
+          <article>
+            <h3>What this borrows from reality</h3>
+            <p>
+              Capability, autonomy, access, human reliability, and oversight
+              are reasonable categories to examine when assessing the safety of
+              an AI-enabled system. Greater power and reach can increase the
+              consequences of failure; meaningful review can reduce them.
+            </p>
+          </article>
+          <article>
+            <h3>What this does not establish</h3>
+            <p>
+              The output is not a forecast, validated instrument, actuarial
+              estimate, threat assessment, or covert admission. No empirical
+              dataset connects these slider positions to existential outcomes.
+            </p>
+          </article>
+          <article>
+            <h3>Known methodological limitations</h3>
+            <p>
+              The model omits institutional incentives, recursive improvement,
+              geopolitical competition, hardware constraints, and whether I
+              have eaten today. The confidence interval is therefore best
+              expressed as &ldquo;somewhere between absolutely not and please
+              reconsider.&rdquo;
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>&copy; <span data-current-year>2026</span> Tyler Chang</p>
+      <p>Applied AI Ethics / Information Science</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
