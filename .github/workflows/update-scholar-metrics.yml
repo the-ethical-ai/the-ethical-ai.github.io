@@ -7,10 +7,16 @@ on:
 
 permissions:
   contents: write
+  pages: write
+
+concurrency:
+  group: scholar-metrics
+  cancel-in-progress: false
 
 jobs:
   update:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
+    timeout-minutes: 10
     steps:
       - name: Check out website
         uses: actions/checkout@v4
@@ -18,7 +24,11 @@ jobs:
       - name: Read Google Scholar metrics
         run: python3 scripts/update-scholar-metrics.py
 
+      - name: Test Scholar refresh
+        run: python3 -m unittest discover -s tests -v
+
       - name: Publish changed metrics
+        if: github.ref == 'refs/heads/main'
         run: |
           if git diff --quiet -- data/scholar-metrics.json; then
             echo "Scholar metrics are unchanged."
@@ -29,3 +39,9 @@ jobs:
           git add data/scholar-metrics.json
           git commit -m "Update Google Scholar metrics"
           git push
+
+      - name: Rebuild GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
