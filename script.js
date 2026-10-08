@@ -17,19 +17,35 @@ if (scholarCard) {
       const hIndex = scholarCard.querySelector("[data-scholar-h-index]");
       const updated = scholarCard.querySelector("[data-scholar-updated]");
       const updateDate = new Date(metrics.updated_at);
-
-      citations.textContent = metrics.citations.toLocaleString("en-US");
-      hIndex.textContent = metrics.h_index.toLocaleString("en-US");
-      updated.dateTime = metrics.updated_at;
-      updated.textContent = new Intl.DateTimeFormat("en-US", {
+      if (
+        !Number.isSafeInteger(metrics.citations) || metrics.citations < 0 ||
+        !Number.isSafeInteger(metrics.h_index) || metrics.h_index < 0 ||
+        metrics.h_index > metrics.citations || typeof metrics.updated_at !== "string" ||
+        !Number.isFinite(updateDate.getTime())
+      ) {
+        throw new Error("Scholar metrics are invalid");
+      }
+      const formattedDate = new Intl.DateTimeFormat("en-US", {
         month: "long",
         day: "numeric",
         year: "numeric",
         timeZone: "UTC",
       }).format(updateDate);
+      citations.textContent = metrics.citations.toLocaleString("en-US");
+      hIndex.textContent = metrics.h_index.toLocaleString("en-US");
+      updated.dateTime = metrics.updated_at;
+      updated.textContent = formattedDate;
+      const stale = Date.now() - updateDate.getTime() > 10 * 24 * 60 * 60 * 1000;
+      scholarCard.dataset.status = stale ? "cached" : "current";
+      const status = scholarCard.querySelector("[data-scholar-status]");
+      status.textContent = stale ? "Cached" : "Weekly";
+      status.title = stale ? "Showing the last successful refresh" : "Scheduled to refresh weekly";
     })
     .catch(() => {
       scholarCard.dataset.status = "cached";
+      const status = scholarCard.querySelector("[data-scholar-status]");
+      status.textContent = "Cached";
+      status.title = "Showing the last successful refresh";
     });
 }
 
@@ -156,38 +172,126 @@ if (riskEstimator) {
   updateRisk();
 }
 
-const canvas = document.querySelector(".motion-field");
+const canvas = document.querySelector(".celestial-field");
 
-if (canvas) {
+if (canvas && canvas.getContext("2d")) {
   const context = canvas.getContext("2d");
-  const prefersReducedMotion = window.matchMedia(
+  const motionPreference = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
-  ).matches;
+  );
+  const sky = document.createElement("canvas");
+  const skyContext = sky.getContext("2d");
   let width = 0;
   let height = 0;
   let pixelRatio = 1;
-  let points = [];
+  let brightStars = [];
   let frame = 0;
+  let lastDraw = 0;
   let pointerX = 0;
   let pointerY = 0;
 
-  const makePoints = () => {
-    const spacing = Math.max(42, Math.min(68, width / 18));
-    const columns = Math.ceil(width / spacing) + 2;
-    const rows = Math.ceil(height / spacing) + 2;
-    points = [];
+  // A seeded sky stays consistent between pages and is cached between frames.
+  const makeSky = () => {
+    let seed = 373;
+    const random = () => {
+      seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+      return seed / 4294967296;
+    };
+    const quietCenter = (x, y) => {
+      const distance = Math.hypot(
+        (x - width * 0.5) / (width * 0.34),
+        (y - height * 0.5) / (height * 0.22),
+      );
+      return 0.18 + Math.min(1, distance) * 0.82;
+    };
+    const star = (x, y, radius, opacity) => {
+      skyContext.beginPath();
+      skyContext.fillStyle = `rgba(235, 232, 226, ${opacity * quietCenter(x, y)})`;
+      skyContext.arc(x, y, radius, 0, Math.PI * 2);
+      skyContext.fill();
+    };
 
-    for (let row = 0; row < rows; row += 1) {
-      for (let column = 0; column < columns; column += 1) {
-        points.push({
-          baseX: column * spacing - spacing / 2,
-          baseY: row * spacing - spacing / 2,
-          column,
-          row,
-          phase: Math.random() * Math.PI * 2,
-        });
+    skyContext.clearRect(0, 0, width, height);
+    brightStars = [];
+    const count = Math.min(1400, Math.round(width * height / 950));
+
+    for (let i = 0; i < count; i += 1) {
+      const x = random() * width;
+      const y = random() * height;
+      const radius = 0.35 + random() ** 3 * 1.25;
+      star(x, y, radius, 0.22 + random() * 0.64);
+      if (radius > 1.25 && brightStars.length < 36) {
+        brightStars.push({ x, y, radius, phase: random() * Math.PI * 2 });
       }
     }
+
+    const dustCount = Math.min(3800, Math.round(width * height / 290));
+    for (let i = 0; i < dustCount; i += 1) {
+      const t = random();
+      const spread = (random() + random() + random() - 1.5) * width * 0.13;
+      const x = width * (0.06 + 0.88 * t) + Math.sin(t * 5.5) * width * 0.14 + spread;
+      const y = height * t + spread * 0.5;
+      star(x, y, 0.2 + random() * 0.65, 0.12 + random() * 0.45);
+    }
+
+    const radius = Math.max(width * 0.43, height * 0.6);
+    skyContext.save();
+    skyContext.translate(width * 0.57, height * 0.5);
+    skyContext.rotate(-0.3);
+    [1, 1.025, 0.78].forEach((scale, index) => {
+      skyContext.beginPath();
+      skyContext.strokeStyle = index === 1
+        ? "rgba(135, 173, 200, 0.25)"
+        : "rgba(229, 225, 217, 0.22)";
+      skyContext.lineWidth = index === 2 ? 0.6 : 0.8;
+      skyContext.ellipse(0, 0, radius * scale, radius * scale * 0.72, 0, 0, Math.PI * 2);
+      skyContext.stroke();
+    });
+
+    skyContext.strokeStyle = "rgba(135, 173, 200, 0.32)";
+    for (let i = 0; i < 120; i += 1) {
+      const angle = i / 120 * Math.PI * 2;
+      const outer = i % 5 === 0 ? 1.05 : 1.037;
+      skyContext.beginPath();
+      skyContext.moveTo(Math.cos(angle) * radius * 1.025, Math.sin(angle) * radius * 0.72 * 1.025);
+      skyContext.lineTo(Math.cos(angle) * radius * outer, Math.sin(angle) * radius * 0.72 * outer);
+      skyContext.stroke();
+    }
+    skyContext.restore();
+  };
+
+  const draw = (time = 0) => {
+    if (time - lastDraw >= 1000 / 30 || !frame) {
+      lastDraw = time;
+      context.clearRect(0, 0, width, height);
+      const offsetX = motionPreference.matches ? 0 : pointerX * 3;
+      const offsetY = motionPreference.matches ? 0 : pointerY * 3;
+      context.drawImage(sky, offsetX - 4, offsetY - 4, width + 8, height + 8);
+
+      brightStars.forEach((point) => {
+        const pulse = 0.16 + Math.sin(time * 0.00065 + point.phase) * 0.1;
+        const x = point.x / width * (width + 8) + offsetX - 4;
+        const y = point.y / height * (height + 8) + offsetY - 4;
+        context.strokeStyle = `rgba(245, 242, 234, ${pulse})`;
+        context.lineWidth = 0.7;
+        context.beginPath();
+        context.moveTo(x - point.radius * 2, y);
+        context.lineTo(x + point.radius * 2, y);
+        context.moveTo(x, y - point.radius * 2);
+        context.lineTo(x, y + point.radius * 2);
+        context.stroke();
+      });
+    }
+
+    if (!motionPreference.matches && !document.hidden) {
+      frame = window.requestAnimationFrame(draw);
+    }
+  };
+
+  const restart = () => {
+    window.cancelAnimationFrame(frame);
+    frame = 0;
+    draw(motionPreference.matches ? 0 : performance.now());
   };
 
   const resize = () => {
@@ -195,86 +299,36 @@ if (canvas) {
     pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
     width = bounds.width;
     height = bounds.height;
-    canvas.width = Math.round(width * pixelRatio);
-    canvas.height = Math.round(height * pixelRatio);
-    context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-    pointerX = width / 2;
-    pointerY = height / 2;
-    makePoints();
+    [canvas, sky].forEach((layer) => {
+      layer.width = Math.round(width * pixelRatio);
+      layer.height = Math.round(height * pixelRatio);
+      layer.getContext("2d").setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    });
+    makeSky();
+    restart();
   };
 
-  const positionAt = (point, time) => {
-    const waveX = Math.sin(time * 0.00028 + point.row * 0.42 + point.phase) * 9;
-    const waveY = Math.cos(time * 0.00024 + point.column * 0.35 + point.phase) * 11;
-    const dx = point.baseX - pointerX;
-    const dy = point.baseY - pointerY;
-    const distance = Math.hypot(dx, dy);
-    const influence = Math.max(0, 1 - distance / 260);
+  window.addEventListener("pointermove", (event) => {
+    pointerX = event.clientX / width - 0.5;
+    pointerY = event.clientY / height - 0.5;
+  }, { passive: true });
 
-    return {
-      x: point.baseX + waveX + dx * influence * 0.035,
-      y: point.baseY + waveY + dy * influence * 0.035,
-    };
-  };
+  document.documentElement.addEventListener("pointerleave", () => {
+    pointerX = 0;
+    pointerY = 0;
+  });
 
-  const draw = (time = 0) => {
-    context.clearRect(0, 0, width, height);
-    const positioned = points.map((point) => positionAt(point, time));
-    const columnCount = Math.max(...points.map((point) => point.column)) + 1;
-
-    context.lineWidth = 0.65;
-    context.strokeStyle = "rgba(54, 137, 220, 0.16)";
-
-    points.forEach((point, index) => {
-      const current = positioned[index];
-      const rightIndex = index + 1;
-      const downIndex = index + columnCount;
-
-      if (points[rightIndex] && points[rightIndex].row === point.row) {
-        context.beginPath();
-        context.moveTo(current.x, current.y);
-        context.lineTo(positioned[rightIndex].x, positioned[rightIndex].y);
-        context.stroke();
-      }
-
-      if (points[downIndex]) {
-        context.beginPath();
-        context.moveTo(current.x, current.y);
-        context.lineTo(positioned[downIndex].x, positioned[downIndex].y);
-        context.stroke();
-      }
-    });
-
-    positioned.forEach((point, index) => {
-      const pulse = 0.35 + Math.sin(time * 0.001 + points[index].phase) * 0.2;
-      context.beginPath();
-      context.fillStyle = `rgba(91, 181, 255, ${pulse})`;
-      context.arc(point.x, point.y, 1.1, 0, Math.PI * 2);
-      context.fill();
-    });
-
-    if (!prefersReducedMotion) {
-      frame = window.requestAnimationFrame(draw);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      window.cancelAnimationFrame(frame);
+      frame = 0;
+    } else {
+      restart();
     }
-  };
-
-  canvas.addEventListener("pointermove", (event) => {
-    const bounds = canvas.getBoundingClientRect();
-    pointerX = event.clientX - bounds.left;
-    pointerY = event.clientY - bounds.top;
   });
 
-  canvas.addEventListener("pointerleave", () => {
-    pointerX = width / 2;
-    pointerY = height / 2;
-  });
-
-  window.addEventListener("resize", () => {
-    window.cancelAnimationFrame(frame);
-    resize();
-    draw(performance.now());
-  });
+  motionPreference.addEventListener("change", restart);
+  window.addEventListener("resize", resize);
 
   resize();
-  draw();
 }

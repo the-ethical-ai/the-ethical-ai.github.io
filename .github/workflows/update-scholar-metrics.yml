@@ -7,10 +7,16 @@ on:
 
 permissions:
   contents: write
+  pages: write
+
+concurrency:
+  group: scholar-metrics
+  cancel-in-progress: false
 
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Check out website
         uses: actions/checkout@v4
@@ -29,3 +35,8 @@ jobs:
           git add data/scholar-metrics.json
           git commit -m "Update Google Scholar metrics"
           git push
+
+      - name: Rebuild GitHub Pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
