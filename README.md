@@ -12,7 +12,7 @@ This is a plain static website designed for GitHub Pages. It has four pages:
 ## Current Content
 
 The site contains Tyler Chang's biography, portrait, current research focus,
-social and academic profiles, three ACM publications, CUI 2026 presentation
+social and academic profiles, four ACM publications, CUI 2026 presentation
 photos, academic roles, education, technical skills, and awards.
 
 The celestial background uses the browser's built-in canvas API, so it works on
