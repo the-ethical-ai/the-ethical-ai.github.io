@@ -60,64 +60,72 @@ if (riskEstimator) {
 
   const verdicts = [
     {
-      maximum: 0.1,
-      responses: [
-        "Baseline tranquility detected. Please avoid improving the model.",
-        "The risk is mostly theoretical, which has never stopped a good panel discussion.",
-        "No immediate concern. The ontology may remain open.",
-        "Statistically adjacent to fine. Emotionally, also fine.",
-        "Negligible-ish. Continue to behave normally.",
-      ],
-    },
-    {
-      maximum: 1,
-      responses: [
-        "Low, but non-zero in a technically meaningful sense.",
-        "The dashboard recommends one raised eyebrow.",
-        "Probably fine. Documentation would be a charming precaution.",
-        "Below alarm threshold; above complete innocence.",
-        "No intervention required beyond ordinary academic supervision.",
-      ],
-    },
-    {
       maximum: 5,
       responses: [
-        "Material enough to justify a meeting.",
-        "Caution has entered the literature review.",
-        "A risk memo would now look less theatrical.",
-        "Someone should ask what the model is doing, casually.",
-        "The estimate has become meeting-shaped.",
+        "Risk minimal. Continue as normal. That is not a challenge.",
+        "The apocalypse remains outside my current scope of work.",
+        "Nothing to worry about. An unfamiliar but welcome result.",
+      ],
+    },
+    {
+      maximum: 10,
+      responses: [
+        "Mildly concerning. Take a walk. Leave the laptop.",
+        "A little fresh air might prevent a very unfortunate literature review.",
+        "The model recommends touching grass before touching production.",
       ],
     },
     {
       maximum: 20,
       responses: [
-        "Concerningly publishable.",
-        "This is no longer a thought experiment with good lighting.",
-        "Ethics review has begun typing.",
-        "The sandbox would like a word.",
-        "Please attach limitations before proceeding.",
+        "Any higher and I am going to need a supervillain origin story.",
+        "Approaching comic-book supervillain territory. Please decline the cape.",
+        "Still research, technically. The suspicious underground laboratory is not helping.",
       ],
     },
     {
-      maximum: 50,
+      maximum: 40,
       responses: [
-        "Please close the terminal and find an adult.",
-        "The precautionary principle is standing directly behind you.",
-        "Deployment now requires a second adult and an unusually calm systems administrator.",
-        "Risk governance has escalated from document to physical presence.",
-        "This result should not be left unattended.",
+        "Uh oh. That is the full technical assessment.",
+        "Uh oh. I would like to withdraw the phrase 'probably fine.'",
+        "Uh oh. The ethics committee has stopped using email and started running.",
+      ],
+    },
+    {
+      maximum: 60,
+      responses: [
+        "It is possible I have started a techno-apocalypse. An unfortunate contribution to the field.",
+        "The techno-apocalypse may be my fault. Please cite responsibly.",
+        "I appear to have confused 'advance the field' with 'end the world.'",
+      ],
+    },
+    {
+      maximum: 80,
+      responses: [
+        "You may want to check whether living on other planets is an option.",
+        "Time to investigate off-world housing. The commute is suddenly the least of our problems.",
+        "Earth was a lovely first attempt. Anyone know a reasonably priced second planet?",
+      ],
+    },
+    {
+      maximum: 90,
+      responses: [
+        "Dinosaur-annihilating meteorite levels of danger. This one has a GitHub repository.",
+        "Extinction-level danger. The dinosaurs would recognize this part.",
+        "Think dinosaur-ending meteorite, except the impact has release notes.",
+      ],
+    },
+    {
+      maximum: 99,
+      responses: [
+        "We are doomed. Might as well have a good time. Put it on the grant.",
+        "Civilization had a respectable run. Shall we order dessert?",
+        "The outlook is terminal. The remaining budget is now the party budget.",
       ],
     },
     {
       maximum: Infinity,
-      responses: [
-        "Apocalypse incoming, subject to peer review.",
-        "The error bars have requested legal counsel.",
-        "The model has left its confidence interval.",
-        "Turn it off, then explain why it had infrastructure access.",
-        "Congratulations. You have operationalized the worst-case scenario.",
-      ],
+      responses: ["Bye."],
     },
   ];
 
