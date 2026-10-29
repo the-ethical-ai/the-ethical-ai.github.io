@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#161619" />
+    <title>Tyler Chang | Companion AI Analytics Dashboard</title>
+    <meta
+      name="description"
+      content="Monthly website traffic trends for selected companion AI platforms. Password required."
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23161619'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%2387adc8' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%23f3f1ed'/%3E%3C/svg%3E"
+    />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="companion-analytics.css" />
+  </head>
+  <body>
+    <canvas class="celestial-field" aria-hidden="true"></canvas>
+    <header class="site-header">
+      <a class="site-name" href="index.html" aria-label="Tyler Chang, home">
+        <span class="site-mark" aria-hidden="true"></span>
+        Tyler Chang
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="research.html">Research</a>
+        <a href="cv.html">CV</a>
+        <a href="existential-ai.html">Existential AI</a>
+        <a href="companion-ai-analytics.html" aria-current="page">Companion AI Analytics</a>
+      </nav>
+    </header>
+
+    <main class="content-page analytics-page">
+      <header class="analytics-intro">
+        <p class="eyebrow">Research observatory / in development</p>
+        <h1>Companion AI<br />Analytics Dashboard</h1>
+        <p class="lead">Monthly website traffic trends across selected companion AI platforms.</p>
+        <p class="analytics-update">Last updated: <time id="last-updated" datetime="2026-10-29">October 29, 2026</time> · Updated monthly</p>
+      </header>
+      <aside class="development-notice" aria-label="Development notice">
+        <p>This page is being developed. Please reach out if you wish to be updated when it is made public.</p>
+        <a href="mailto:tlc373@drexel.edu?subject=Companion%20AI%20Analytics%20Dashboard">Contact Tyler for access or updates &#8599;</a>
+      </aside>
+      <section id="access-gate" class="analytics-panel access-gate" aria-labelledby="access-title">
+        <p class="eyebrow">Restricted access</p>
+        <h2 id="access-title">Access the dashboard</h2>
+        <p>Please contact me to request the password.</p>
+        <form id="unlock-form">
+          <label for="dashboard-password">Dashboard password</label>
+          <div class="unlock-row"><input id="dashboard-password" type="password" required autocomplete="current-password" /><button type="submit">Unlock dashboard</button></div>
+          <p id="access-message" role="status" aria-live="polite"></p>
+        </form>
+        <noscript>JavaScript is required to decrypt and view this dashboard.</noscript>
+      </section>
+      <section id="dashboard" hidden aria-label="Traffic analytics">
+        <div class="dashboard-toolbar"><p id="coverage-label"></p><button id="lock-dashboard" type="button">Lock dashboard</button></div>
+        <div id="summary-cards" class="summary-cards"></div>
+        <section class="analytics-panel" aria-labelledby="chart-title">
+          <div class="chart-heading"><div><p class="eyebrow">Traffic over time</p><h2 id="chart-title">Monthly visits by platform</h2></div><label for="chart-scale">Scale <select id="chart-scale"><option value="linear">Linear</option><option value="log">Logarithmic</option></select></label></div>
+          <p class="chart-help">Visits in millions. Select platforms below; hover over or focus a point for its value. Logarithmic scale helps compare smaller platforms.</p>
+          <div id="traffic-chart" class="traffic-chart"></div>
+          <p class="chart-help">Dates use calendar spacing. April–June were not recorded; dashed lines connect March and July as a guide, with no intermediate observations.</p>
+          <div class="platform-actions"><button id="select-all" type="button">Show all</button><button id="select-top" type="button">Top five in latest month</button><button id="select-none" type="button">Clear selection</button></div>
+          <fieldset class="platform-picker"><legend>Platforms shown</legend><div id="platform-options"></div></fieldset>
+          <p id="selection-status" role="status"></p>
+        </section>
+        <section class="analytics-panel data-section" aria-labelledby="table-title"><h2 id="table-title">Recorded observations</h2><p>Monthly visits, in millions. “Not recorded” is missing data, not zero.</p><div class="table-scroll" tabindex="0" role="region" aria-label="Monthly traffic data table"><table id="traffic-table"></table></div></section>
+        <section class="analytics-panel methodology" aria-labelledby="notes-title"><p class="eyebrow">Reading the data</p><h2 id="notes-title">Source, scope &amp; limitations</h2>
+          <p>Source: Similarweb website traffic estimates, manually collected by Tyler Chang. Values represent monthly visits in millions, not unique visitors, accounts, or app usage.</p>
+          <p>This is a selection of prominent companion AI websites, not an exhaustive list of the market. Coverage expands over time; not all 20 platforms were tracked throughout the period. Missing observations remain unrecorded and are excluded from totals, means, and medians.</p>
+          <p>Totals describe the websites recorded in each month. Changes in these totals can reflect added coverage as well as traffic changes, so they should not be interpreted as market growth. The same-platform comparison uses only platforms recorded in both the first and latest months.</p>
+          <p>Summary statistics are calculated from the platform rows. Metrics and this visualization will be updated monthly as new observations are collected.</p>
+        </section>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>&copy; <span data-current-year>2026</span> Tyler Chang</p>
+      <p>Applied AI Ethics / Information Science</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="companion-analytics.js" defer></script>
+  </body>
+</html>

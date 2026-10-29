@@ -1,0 +1,55 @@
+[hidden] { display: none !important; }
+.site-nav { flex-wrap: wrap; column-gap: clamp(.8rem, 2vw, 2rem); }
+.site-header { gap: 1.5rem; }
+.analytics-intro { padding: 4.5rem 0 2.5rem; }
+.analytics-intro h1 { font-size: clamp(2.5rem, 6vw, 5rem); line-height: 1.08; max-width: 22ch; }
+.analytics-intro .lead { margin-top: 1.5rem; }
+.analytics-update, .chart-help, .analytics-panel > p, .dashboard-toolbar, .summary-cards small, #selection-status { color: var(--muted); }
+.analytics-update { margin-top: 1.5rem; font-size: .85rem; }
+.development-notice { border-left: 3px solid var(--blue); padding: 1.25rem 1.5rem; background: var(--surface); margin-bottom: 2rem; }
+.development-notice p { margin: 0 0 .5rem; }
+.analytics-panel { padding: clamp(1.2rem, 3vw, 2rem); background: var(--surface); border: 1px solid var(--line); border-radius: 5px; margin-top: 1.5rem; }
+.access-gate { max-width: 660px; margin: 3rem auto; }
+.analytics-page button, .analytics-page input, .analytics-page select { font: inherit; color: var(--text); background: var(--background); border: 1px solid var(--line-bright); border-radius: 4px; padding: .6rem .8rem; }
+.analytics-page button { cursor: pointer; }
+.analytics-page button:hover { border-color: var(--blue); background: #283640; }
+.analytics-page button:disabled { opacity: .6; cursor: wait; }
+#unlock-form { margin-top: 1.5rem; }
+#unlock-form label { display: block; margin-bottom: .5rem; }
+.unlock-row { display: flex; flex-wrap: wrap; gap: .75rem; }
+.unlock-row input { flex: 1; min-width: 0; width: 100%; }
+.unlock-row button { background: #314654; }
+#access-message { color: var(--blue-bright); min-height: 1.65em; }
+.dashboard-toolbar, .chart-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.dashboard-toolbar { margin: 2.5rem 0 1rem; font-size: .85rem; }
+.summary-cards { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; }
+.summary-cards article { background: var(--surface); border-top: 2px solid var(--blue); padding: 1.3rem; }
+.summary-cards p { margin: 0; color: var(--muted); font-size: .85rem; }
+.summary-cards strong { font-size: clamp(1.4rem, 3vw, 2.2rem); display: block; font-variant-numeric: tabular-nums; margin: .4rem 0; }
+.summary-cards small { display: block; }
+.chart-help { font-size: .85rem; max-width: 90ch; }
+.traffic-chart { margin: 1.5rem 0 .5rem; }
+.traffic-chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.traffic-chart text { fill: var(--muted); font-size: 14px; }
+.chart-grid { stroke: var(--line); stroke-width: 1; }
+.traffic-chart circle:focus { stroke: white; stroke-width: 3; outline: none; r: 7; }
+.empty-chart { padding: 5rem 1rem; text-align: center; color: var(--muted); }
+.platform-actions { display: flex; gap: .7rem; flex-wrap: wrap; margin: 1.5rem 0; }
+.platform-actions button { font-size: .8rem; }
+.platform-picker { margin: 0; border: 0; border-top: 1px solid var(--line); padding: 1rem 0 0; }
+.platform-picker legend { color: var(--muted); padding-right: 1rem; }
+#platform-options { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: .7rem 1rem; }
+#platform-options label { display: flex; align-items: center; gap: .5rem; font-size: .82rem; cursor: pointer; overflow-wrap: anywhere; }
+#platform-options input { accent-color: var(--blue); margin: 0; flex-shrink: 0; }
+.platform-swatch { width: 12px; height: 3px; flex-shrink: 0; }
+#selection-status { font-size: .8rem; }
+.table-scroll { overflow-x: auto; margin-top: 1.5rem; }
+#traffic-table { border-collapse: collapse; width: 100%; font-size: .85rem; font-variant-numeric: tabular-nums; }
+#traffic-table caption { text-align: left; color: var(--muted); margin-bottom: .8rem; }
+#traffic-table th, #traffic-table td { padding: .75rem 1rem; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+#traffic-table th:first-child { text-align: left; }
+#traffic-table thead, #traffic-table tfoot { color: var(--blue-bright); }
+.missing-value { color: var(--muted); font-size: .75rem; }
+.methodology p { max-width: 95ch; }
+@media(max-width: 900px) { #platform-options { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+@media(max-width: 620px) { .summary-cards { grid-template-columns: 1fr; } #platform-options { grid-template-columns: repeat(2,minmax(0,1fr)); } .traffic-chart { overflow-x: auto; } .traffic-chart svg { min-width: 640px; } .analytics-intro { padding-top: 3rem; } }

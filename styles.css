@@ -60,6 +60,7 @@ a:hover, a:focus-visible { color: #fff; }
   border-bottom: 1px solid var(--line);
   display: flex;
   justify-content: space-between;
+  gap: 1.25rem;
   min-height: 76px;
   padding: 0 clamp(1.25rem, 5vw, 5rem);
   position: sticky;
@@ -75,6 +76,7 @@ a:hover, a:focus-visible { color: #fff; }
 }
 
 .site-name {
+  flex-shrink: 0;
   align-items: center;
   color: var(--text);
   display: inline-flex;
@@ -92,7 +94,7 @@ a:hover, a:focus-visible { color: #fff; }
   width: 8px;
 }
 
-.site-nav { display: flex; gap: clamp(1rem, 3vw, 2.5rem); }
+.site-nav { display: flex; flex-wrap: wrap; gap: 0.2rem clamp(1rem, 3vw, 2.5rem); }
 
 .site-nav a {
   color: var(--muted);
