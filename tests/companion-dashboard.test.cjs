@@ -33,6 +33,7 @@ test('encrypted unlock, missing observations, filters, scale, and relock', async
   await unlock(password);
   assert.equal(get('dashboard').hidden,false);
   assert.equal(get('access-gate').hidden,true);
+  assert.equal(get('access-screen').hidden,true);
   assert.equal(get('dashboard-password').value,'');
   assert.match(get('summary-cards').innerHTML,/16.5M/);
   assert.match(get('summary-cards').innerHTML,/\+45.5%/); // same two platforms: 11 → 16
@@ -51,6 +52,7 @@ test('encrypted unlock, missing observations, filters, scale, and relock', async
   get('lock-dashboard').handlers.click();
   assert.equal(get('dashboard').hidden,true);
   assert.equal(get('access-gate').hidden,false);
+  assert.equal(get('access-screen').hidden,false);
   assert.equal(get('traffic-table').innerHTML,'');
   assert.equal(get('traffic-chart').innerHTML,'');
   assert.equal(get('select-top').onclick,null);

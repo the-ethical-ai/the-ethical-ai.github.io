@@ -6,10 +6,23 @@
 .analytics-intro .lead { margin-top: 1.5rem; }
 .analytics-update, .chart-help, .analytics-panel > p, .dashboard-toolbar, .summary-cards small, #selection-status { color: var(--muted); }
 .analytics-update { margin-top: 1.5rem; font-size: .85rem; }
-.development-notice { border-left: 3px solid var(--blue); padding: 1.25rem 1.5rem; background: var(--surface); margin-bottom: 2rem; }
-.development-notice p { margin: 0 0 .5rem; }
 .analytics-panel { padding: clamp(1.2rem, 3vw, 2rem); background: var(--surface); border: 1px solid var(--line); border-radius: 5px; margin-top: 1.5rem; }
-.access-gate { max-width: 660px; margin: 3rem auto; }
+.access-screen { max-width: 720px; margin: clamp(3rem, 8vh, 6rem) auto 0; }
+.coming-soon { background: linear-gradient(145deg, rgba(135,173,200,.07), transparent 70%), var(--surface); border: 1px solid var(--line-bright); border-radius: 16px; padding: clamp(1.75rem, 5vw, 3.25rem); }
+.coming-soon-status { display: inline-flex; align-items: center; gap: .5rem; color: var(--blue-bright); font-size: .72rem; font-weight: 600; border: 1px solid var(--line-bright); border-radius: 999px; padding: .25rem .75rem; }
+.coming-soon-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+.coming-soon h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.18; margin: 1.5rem 0; letter-spacing: -.025em; }
+.coming-soon h1 span { display: block; }
+.coming-soon p { color: var(--muted); max-width: 50ch; margin: 0 0 1.5rem; }
+.coming-soon a { font-size: .9rem; }
+.access-gate { margin: 1rem 0 0; border-radius: 12px; padding: clamp(1.5rem, 4vw, 2.25rem); }
+.access-gate h2 { font-size: 1.15rem; }
+.access-gate > p { margin: .4rem 0 0; font-size: .9rem; }
+.access-gate #unlock-form { margin-top: 1.25rem; }
+.access-gate #unlock-form label { font-size: .8rem; color: var(--muted); }
+.access-gate #access-message { margin-bottom: 0; }
+.access-gate #access-message:empty { display: none; }
+@media(max-width: 440px) { .unlock-row { flex-direction: column; } .unlock-row button { width: 100%; } }
 .analytics-page button, .analytics-page input, .analytics-page select { font: inherit; color: var(--text); background: var(--background); border: 1px solid var(--line-bright); border-radius: 4px; padding: .6rem .8rem; }
 .analytics-page button { cursor: pointer; }
 .analytics-page button:hover { border-color: var(--blue); background: #283640; }

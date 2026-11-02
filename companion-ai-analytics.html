@@ -35,28 +35,32 @@
     </header>
 
     <main class="content-page analytics-page">
-      <header class="analytics-intro">
-        <p class="eyebrow">Research observatory / in development</p>
-        <h1>Companion AI<br />Analytics Dashboard</h1>
-        <p class="lead">Monthly website traffic trends across selected companion AI platforms.</p>
-        <p class="analytics-update">Last updated: <time id="last-updated" datetime="2026-10-29">October 29, 2026</time> · Updated monthly</p>
-      </header>
-      <aside class="development-notice" aria-label="Development notice">
-        <p>This page is being developed. Please reach out if you wish to be updated when it is made public.</p>
-        <a href="mailto:tlc373@drexel.edu?subject=Companion%20AI%20Analytics%20Dashboard">Contact Tyler for access or updates &#8599;</a>
-      </aside>
-      <section id="access-gate" class="analytics-panel access-gate" aria-labelledby="access-title">
-        <p class="eyebrow">Restricted access</p>
-        <h2 id="access-title">Access the dashboard</h2>
-        <p>Please contact me to request the password.</p>
-        <form id="unlock-form">
-          <label for="dashboard-password">Dashboard password</label>
-          <div class="unlock-row"><input id="dashboard-password" type="password" required autocomplete="current-password" /><button type="submit">Unlock dashboard</button></div>
-          <p id="access-message" role="status" aria-live="polite"></p>
-        </form>
-        <noscript>JavaScript is required to decrypt and view this dashboard.</noscript>
-      </section>
+      <div id="access-screen" class="access-screen">
+        <section class="coming-soon" aria-labelledby="coming-soon-title">
+          <span class="coming-soon-status">In development</span>
+          <h1 id="coming-soon-title">Coming Soon:<span>Companion AI Analytics Platforms</span></h1>
+          <p>This page is being developed. Please reach out if you wish to be updated when it is made public.</p>
+          <a href="mailto:tlc373@drexel.edu?subject=Companion%20AI%20Analytics%20Dashboard">Contact Tyler for access or updates <span aria-hidden="true">&#8599;</span></a>
+        </section>
+        <section id="access-gate" class="analytics-panel access-gate" aria-labelledby="access-title">
+          <h2 id="access-title">Have access?</h2>
+          <p>Enter your password to view the dashboard.</p>
+          <form id="unlock-form">
+            <label for="dashboard-password">Dashboard password</label>
+            <div class="unlock-row"><input id="dashboard-password" type="password" required autocomplete="current-password" /><button type="submit">Unlock dashboard</button></div>
+            <p id="access-message" role="status" aria-live="polite"></p>
+          </form>
+          <noscript>JavaScript is required to decrypt and view this dashboard.</noscript>
+        </section>
+      </div>
       <section id="dashboard" hidden aria-label="Traffic analytics">
+        <header class="analytics-intro">
+          <p class="eyebrow">Research observatory / in development</p>
+          <h1>Companion AI<br />Analytics Dashboard</h1>
+          <p class="lead">Monthly website traffic trends across selected companion AI platforms.</p>
+          <p class="analytics-update">Last updated: <time id="last-updated" datetime="2026-10-29">October 29, 2026</time> · Updated monthly</p>
+        </header>
+
         <div class="dashboard-toolbar"><p id="coverage-label"></p><button id="lock-dashboard" type="button">Lock dashboard</button></div>
         <div id="summary-cards" class="summary-cards"></div>
         <section class="analytics-panel" aria-labelledby="chart-title">

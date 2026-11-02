@@ -104,6 +104,7 @@
       $('dashboard-password').value = '';
       $('access-message').textContent = '';
       $('access-gate').hidden = true;
+      $('access-screen').hidden = true;
       $('dashboard').hidden = false;
       $('lock-dashboard').focus();
     } catch (_) {
@@ -126,6 +127,7 @@
     $('select-top').onclick = null;
     $('dashboard').hidden = true;
     $('access-gate').hidden = false;
+    $('access-screen').hidden = false;
     $('dashboard-password').focus();
   });
 })();
