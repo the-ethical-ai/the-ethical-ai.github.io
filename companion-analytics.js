@@ -7,8 +7,37 @@
   const escape = (s) => String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   let data = null;
   let selected = new Set();
+  let activePoint = null;
+
+  function hideTooltip() {
+    $('chart-tooltip').hidden = true;
+    $('chart-tooltip').replaceChildren();
+    activePoint?.removeAttribute('aria-describedby');
+    activePoint = null;
+  }
+
+  function showTooltip(point) {
+    if (!data) return;
+    hideTooltip();
+    const platform = data.platforms[Number(point.dataset.platform)];
+    const month = Number(point.dataset.month);
+    const visits = platform.visits[month];
+    const tooltip = $('chart-tooltip');
+    tooltip.innerHTML = `<strong>${escape(platform.name)}</strong><span>${escape(monthName(data.months[month]))}</span><b>${number(Math.round(visits * 1000000))} visits</b>`;
+    tooltip.hidden = false;
+    activePoint = point;
+    point.setAttribute('aria-describedby', 'chart-tooltip');
+    const rect = point.getBoundingClientRect();
+    const padding = 12;
+    const left = Math.min(Math.max(padding, rect.left + rect.width / 2 - tooltip.offsetWidth / 2), window.innerWidth - tooltip.offsetWidth - padding);
+    const above = rect.top - tooltip.offsetHeight - padding;
+    const top = above >= padding ? above : Math.min(rect.bottom + padding, window.innerHeight - tooltip.offsetHeight - padding);
+    tooltip.style.left = `${left}px`;
+    tooltip.style.top = `${Math.max(padding, top)}px`;
+  }
 
   function chart() {
+    hideTooltip();
     const platforms = data.platforms.filter((_, i) => selected.has(i));
     $('selection-status').textContent = `${platforms.length} of ${data.platforms.length} platforms shown.`;
     if (!platforms.length) {
@@ -37,8 +66,8 @@
           const gap = (Number(data.months[i].slice(0,4))*12+Number(data.months[i].slice(5))) - (Number(data.months[i-1].slice(0,4))*12+Number(data.months[i-1].slice(5))) > 1;
           svg += `<line x1="${x(i-1)}" y1="${y(p.visits[i-1])}" x2="${x(i)}" y2="${y(v)}" stroke="${color}" stroke-width="2.5" ${gap?'stroke-dasharray="7 6"':''}/>`;
         }
-        const label = `${p.name}, ${monthName(data.months[i])}: ${number(v)} million visits`;
-        svg += `<circle cx="${x(i)}" cy="${y(v)}" r="5" fill="${color}" tabindex="0" role="img" aria-label="${escape(label)}"><title>${escape(label)}</title></circle>`;
+        const label = `${p.name}, ${monthName(data.months[i])}: ${number(Math.round(v * 1000000))} visits`;
+        svg += `<circle cx="${x(i)}" cy="${y(v)}" r="5" fill="${color}" tabindex="0" role="img" data-platform="${data.platforms.indexOf(p)}" data-month="${i}" aria-label="${escape(label)}"/>`;
       });
     });
     $('traffic-chart').innerHTML = svg + '</svg>';
@@ -65,7 +94,7 @@
     $('last-updated').textContent = new Date(`${data.updated}T12:00:00Z`).toLocaleDateString('en-US', {month:'long',day:'numeric',year:'numeric',timeZone:'UTC'});
     $('coverage-label').textContent = `${data.platforms.length} platforms · ${data.months.length} recorded months · ${monthName(data.months[0])}–${monthName(data.months[latest])}`;
     const cards = [
-      ['Latest recorded total', `${number(stats[latest].sum)}M`, `${monthName(data.months[latest])} · ${stats[latest].count} platforms`],
+      ['Latest recorded total', `${stats[latest].sum.toLocaleString('en-US', {minimumFractionDigits: 3, maximumFractionDigits: 3})}M`, `${monthName(data.months[latest])} · ${stats[latest].count} platforms`],
       ['Platforms recorded', `${stats[0].count} → ${stats[latest].count}`, 'First month → latest month'],
       ['Same-platform change', `${change >= 0 ? '+' : ''}${change.toFixed(1)}%`, `${matched.length} platforms · first → latest month`]
     ];
@@ -121,7 +150,24 @@
   $('chart-scale').addEventListener('change', () => { if (data) chart(); });
   $('select-all').addEventListener('click', () => choose(data.platforms.map((_,i) => i)));
   $('select-none').addEventListener('click', () => choose([]));
+  ['pointerover', 'focusin', 'click'].forEach((type) => {
+    $('traffic-chart').addEventListener(type, (event) => {
+      const point = event.target.closest('circle[data-platform]');
+      if (point) showTooltip(point);
+    });
+  });
+  ['pointerout', 'focusout'].forEach((type) => {
+    $('traffic-chart').addEventListener(type, (event) => {
+      if (event.target === activePoint) hideTooltip();
+    });
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') hideTooltip();
+  });
+  window.addEventListener('scroll', hideTooltip, true);
+  window.addEventListener('resize', hideTooltip);
   $('lock-dashboard').addEventListener('click', () => {
+    hideTooltip();
     data = null; selected.clear();
     ['summary-cards','platform-options','traffic-chart','traffic-table','coverage-label','selection-status'].forEach((id) => { $(id).replaceChildren(); });
     $('select-top').onclick = null;

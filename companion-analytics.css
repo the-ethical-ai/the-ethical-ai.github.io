@@ -46,6 +46,11 @@
 .traffic-chart text { fill: var(--muted); font-size: 14px; }
 .chart-grid { stroke: var(--line); stroke-width: 1; }
 .traffic-chart circle:focus { stroke: white; stroke-width: 3; outline: none; r: 7; }
+.traffic-chart circle:hover { stroke: white; stroke-width: 2; cursor: crosshair; }
+.chart-tooltip { position: fixed; z-index: 100; width: max-content; max-width: min(280px, calc(100vw - 24px)); padding: .8rem 1rem; border: 1px solid var(--line-bright); border-radius: 8px; background: #22262d; box-shadow: 0 8px 28px rgba(0,0,0,.4); pointer-events: none; font-size: .85rem; line-height: 1.5; overflow-wrap: anywhere; }
+.chart-tooltip strong, .chart-tooltip span, .chart-tooltip b { display: block; }
+.chart-tooltip span { color: var(--muted); font-size: .78rem; margin: .15rem 0 .45rem; }
+.chart-tooltip b { color: var(--blue-bright); font-variant-numeric: tabular-nums; }
 .empty-chart { padding: 5rem 1rem; text-align: center; color: var(--muted); }
 .platform-actions { display: flex; gap: .7rem; flex-wrap: wrap; margin: 1.5rem 0; }
 .platform-actions button { font-size: .8rem; }
