@@ -51,7 +51,7 @@ To refresh from a machine that can reach Google Scholar, run
 
 `companion-ai-analytics.html` adds a restricted dashboard in the existing theme,
 with selectable platform trends, linear/logarithmic scales, a data table, and
-coverage-aware statistics. Last updated: October 29, 2026. Values are monthly
+coverage-aware statistics. Last updated: November 11, 2026. Values are monthly
 website visits **in millions**, supplied from Similarweb; this is a selected
 sample, not the whole market. The last-updated date is a collection update marker,
 not the current date on each visit. Monthly updates are manual.
