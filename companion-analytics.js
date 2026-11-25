@@ -50,14 +50,18 @@
     const min = Math.min(...values);
     const upper = log ? 10 ** Math.ceil(Math.log10(max)) : Math.ceil(max / 5) * 5 || 5;
     const lower = log ? 10 ** Math.floor(Math.log10(min)) : 0;
-    const w = 1000, h = 440, left = 68, right = 32, top = 28, bottom = 65;
+    const w = 1000, h = 500, left = 68, right = 32, top = 28, bottom = 125;
     const dates = data.months.map((m) => Date.parse(`${m}-01T00:00:00Z`));
     const x = (i) => left + (dates[i] - dates[0]) / (dates.at(-1) - dates[0] || 1) * (w - left - right);
     const y = (v) => top + (1 - (log ? (Math.log10(v) - Math.log10(lower)) / (Math.log10(upper) - Math.log10(lower) || 1) : v / upper)) * (h - top - bottom);
     const ticks = log ? Array.from({length: Math.round(Math.log10(upper) - Math.log10(lower)) + 1}, (_, i) => lower * 10 ** i) : Array.from({length: 6}, (_, i) => upper * i / 5);
     let svg = `<svg viewBox="0 0 ${w} ${h}" role="group" aria-labelledby="traffic-svg-title traffic-svg-desc"><title id="traffic-svg-title">Monthly website visits in millions</title><desc id="traffic-svg-desc">${escape(platforms.map((p) => p.name).join(', '))}. ${log ? 'Logarithmic' : 'Linear'} scale. Exact observations are also available in the data table.</desc>`;
     ticks.forEach((v) => { svg += `<line x1="${left}" x2="${w-right}" y1="${y(v)}" y2="${y(v)}" class="chart-grid"/><text x="${left-12}" y="${y(v)+5}" text-anchor="end">${number(v)}</text>`; });
-    data.months.forEach((m, i) => { svg += `<text x="${x(i)}" y="${h-22}" text-anchor="${i===0?'start':i===data.months.length-1?'end':'middle'}">${escape(monthName(m))}</text>`; });
+    data.months.forEach((month, index) => {
+      const labelX = x(index);
+      const labelY = h - bottom + 24;
+      svg += `<text x="${labelX}" y="${labelY}" text-anchor="end" transform="rotate(-45 ${labelX} ${labelY})">${escape(monthName(month))}</text>`;
+    });
     platforms.forEach((p) => {
       const color = colors[data.platforms.indexOf(p) % colors.length];
       p.visits.forEach((v, i) => {
@@ -100,7 +104,39 @@
     ];
     $('summary-cards').innerHTML = cards.map(([label,value,note]) => `<article><p>${escape(label)}</p><strong>${escape(value)}</strong><small>${escape(note)}</small></article>`).join('');
     $('platform-options').innerHTML = data.platforms.map((p,i) => `<label><input type="checkbox" value="${i}"/><span class="platform-swatch" style="background:${colors[i%colors.length]}"></span>${escape(p.name)}</label>`).join('');
-    $('traffic-table').innerHTML = `<caption>Similarweb monthly website visits (millions)</caption><thead><tr><th scope="col">Platform / statistic</th>${data.months.map((m) => `<th scope="col">${escape(monthName(m))}</th>`).join('')}</tr></thead><tbody>${data.platforms.map((p) => `<tr><th scope="row">${escape(p.name)}</th>${p.visits.map((v) => `<td>${v===null?'<span class="missing-value">Not recorded</span>':number(v)}</td>`).join('')}</tr>`).join('')}</tbody><tfoot>${[['Platforms recorded','count'],['Total','sum'],['Mean','mean'],['Median','median']].map(([label,key]) => `<tr><th scope="row">${label}</th>${stats.map((s) => `<td>${number(s[key])}</td>`).join('')}</tr>`).join('')}</tfoot>`;
+    const previous = latest - 1;
+    const currentDate = new Date(`${data.months[latest]}-01T00:00:00Z`);
+    const previousDate = new Date(`${data.months[previous]}-01T00:00:00Z`);
+    const consecutiveMonths = currentDate.getUTCFullYear() * 12 + currentDate.getUTCMonth()
+      - previousDate.getUTCFullYear() * 12 - previousDate.getUTCMonth() === 1;
+    const shortMonth = (date) => date.toLocaleDateString('en-US', {
+      month: 'short', year: 'numeric', timeZone: 'UTC'
+    });
+    const changePeriod = `${shortMonth(currentDate)} vs ${shortMonth(previousDate)}`;
+    const platformRows = data.platforms.map((platform) => {
+      const currentVisits = platform.visits[latest];
+      const previousVisits = platform.visits[previous];
+      let changeCell = '<span class="missing-value">Not available</span>';
+      let changeClass = 'monthly-change';
+      if (consecutiveMonths && currentVisits !== null && previousVisits !== null) {
+        const difference = Math.round((currentVisits - previousVisits) * 1000000) / 1000000;
+        const percent = difference / previousVisits * 100;
+        const sign = difference > 0 ? '+' : '';
+        if (difference > 0) changeClass += ' traffic-gain';
+        if (difference < 0) changeClass += ' traffic-loss';
+        changeCell = `${sign}${number(difference)}M<small>${sign}${percent.toFixed(2)}%</small>`;
+      }
+      const observations = platform.visits.map((visits) => {
+        const value = visits === null ? '<span class="missing-value">Not recorded</span>' : number(visits);
+        return `<td>${value}</td>`;
+      }).join('');
+      return `<tr><th scope="row">${escape(platform.name)}</th>${observations}<td class="${changeClass}">${changeCell}</td></tr>`;
+    }).join('');
+    const statisticRows = [['Platforms recorded','count'],['Total','sum'],['Mean','mean'],['Median','median']]
+      .map(([label,key]) => `<tr><th scope="row">${label}</th>${stats.map((s) => `<td>${number(s[key])}</td>`).join('')}<td class="monthly-change">—</td></tr>`).join('');
+    $('traffic-table').innerHTML = `<caption>Similarweb monthly website visits (millions)</caption>
+      <thead><tr><th scope="col">Platform / statistic</th>${data.months.map((month) => `<th scope="col">${escape(monthName(month))}</th>`).join('')}<th scope="col" class="monthly-change">Month-over-month<small>${escape(changePeriod)}</small></th></tr></thead>
+      <tbody>${platformRows}</tbody><tfoot>${statisticRows}</tfoot>`;
     const top = data.platforms.map((p,i) => [i,p.visits[latest]??-1]).sort((a,b) => b[1]-a[1]).slice(0,5).map(([i]) => i);
     $('select-top').onclick = () => choose(top);
     choose(top);

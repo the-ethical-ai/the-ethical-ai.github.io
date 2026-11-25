@@ -39,7 +39,12 @@ test('encrypted unlock, missing observations, filters, scale, and relock', async
   assert.match(get('summary-cards').innerHTML,/\+45.5%/); // same two platforms: 11 → 16
   assert.match(get('traffic-table').innerHTML,/Not recorded/);
   assert.match(get('traffic-table').innerHTML,/&lt;unsafe&gt;/);
+  assert.match(get('traffic-table').innerHTML,/Month-over-month<small>Sep 2026 vs Aug 2026/);
+  assert.match(get('traffic-table').innerHTML,/class="monthly-change traffic-loss">-3M<small>-20.00%/);
+  assert.match(get('traffic-table').innerHTML,/class="monthly-change traffic-gain">\+1M<small>\+33.33%/);
+  assert.match(get('traffic-table').innerHTML,/class="monthly-change"><span class="missing-value">Not available/);
   assert.equal((get('traffic-chart').innerHTML.match(/<circle /g)||[]).length,9);
+  assert.equal((get('traffic-chart').innerHTML.match(/transform="rotate\(-45 /g)||[]).length,fixture.months.length);
   assert.match(get('traffic-chart').innerHTML,/stroke-dasharray/);
   assert.doesNotMatch(get('traffic-chart').innerHTML,/NaN|Infinity/);
   const point = {dataset:{platform:'1',month:'3'},attributes:{},closest(){return this;},setAttribute(k,v){this.attributes[k]=v;},removeAttribute(k){delete this.attributes[k];},getBoundingClientRect(){return {left:970,width:10,top:20,bottom:30};}};
